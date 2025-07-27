@@ -1,0 +1,272 @@
+/* styles.css */
+
+html, body {
+    height: 100%; /* Ensure html and body take full viewport height */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Absolutely prevent scrolling on the body */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex; /* Use flexbox for the body to center content vertically */
+    align-items: center;
+    justify-content: center;
+    background-color: #080C14; /* Deep, almost black, rich blue background */
+    color: #E0E7EB; /* Soft, light blue-gray for primary text */
+    padding: 0.3rem; /* Further reduced padding for maximum screen space */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    text-shadow: 0 0 2px rgba(175, 220, 255, 0.2); /* Subtle text glow */
+}
+
+/* Main container adjustments to fit viewport height */
+.grid {
+    height: 100%; /* Take full height of the body */
+    max-height: calc(100vh - 0.6rem); /* Account for body padding (2 * 0.3rem) */
+    width: 100%;
+    max-width: 1300px; /* Increased max-width for a broader dashboard feel */
+    gap: 0.3rem; /* Reduced main grid gaps */
+    display: flex; /* Ensure the grid itself is a flex container for its columns on small screens */
+    flex-direction: column;
+}
+
+/* Column flex for better vertical distribution across all screen sizes */
+.lg\:col-span-2, /* Left column */
+.flex.flex-col.gap-8 { /* Right column */
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure columns take full height */
+    gap: 0.3rem; /* Reduced gap between cards within columns */
+}
+
+
+/* Custom styles for video overlay */
+.video-container {
+    position: relative;
+    width: 100%;
+    flex-grow: 3; /* Allow video container to take significantly more available vertical space */
+    min-height: 70px; /* Minimum height for video, adjusted */
+    padding-bottom: 56.25%; /* Fixed 16:9 Aspect Ratio (9 / 16 = 0.5625) */
+    height: 0; /* Set height to 0 for padding-bottom trick */
+    overflow: hidden;
+    background-color: #000;
+    border-radius: 0.75rem;
+    box-shadow:
+        0 0 15px rgba(0, 191, 255, 0.3), /* Outer blue glow */
+        inset 0 0 8px rgba(0, 191, 255, 0.2); /* Inner blue glow */
+    border: 1px solid rgba(0, 191, 255, 0.4); /* Thin blue border */
+}
+.video-container video,
+.video-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures video fills container without distortion */
+}
+
+/* Dashboard Card Styling */
+.dashboard-card {
+    background-color: #1A2E44; /* Darker, slightly desaturated blue for cards */
+    border-radius: 0.75rem; /* Slightly less rounded for a sharper look */
+    padding: 0.4rem; /* Adjusted padding */
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(0, 191, 255, 0.1); /* Subtle blue glow on cards */
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem; /* Reduced gap inside cards */
+    flex-shrink: 0; /* Prevent shrinking if content is too large by default */
+    border: 1px solid #3A5F8C; /* Muted blue border */
+}
+
+/* Allow system overview card to grow */
+.system-overview-card {
+    flex-grow: 1; /* System overview takes remaining space in left column */
+    /* Adjust grid for status items to align better */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Auto-fit columns for smaller items */
+    gap: 0.2rem 0.5rem; /* Row gap, column gap */
+    align-items: center;
+}
+
+
+.dashboard-card h2, .dashboard-card h3 {
+    color: #A0D7F5; /* Lighter, clear blue for headings */
+    font-size: 0.8rem; /* Smaller heading for compactness */
+    margin-bottom: 0.05rem; /* Reduced margin below headings */
+    font-weight: 700; /* Bolder headings */
+    text-align: center; /* Ensure headings are centered */
+}
+
+/* Adjust font size for status items in system overview */
+.system-overview-card p {
+    font-size: 0.7rem; /* Smaller font */
+    line-height: 1.1; /* Tighter line height */
+    color: #8DA9BF; /* Softer blue-gray for status labels */
+    padding: 0.1rem; /* Minimal padding for status items */
+}
+.system-overview-card p strong {
+    color: #C0DEEE; /* Clearer labels */
+    font-weight: 600;
+}
+
+
+/* Button Styling */
+.control-buttons button {
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    padding: 0.3rem 0.5rem; /* Adjusted button padding */
+    font-size: 0.65rem; /* Smaller font for buttons */
+    font-weight: 600; /* Bolder buttons */
+    border-radius: 0.5rem; /* Slightly more rounded buttons */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Subtle button shadow */
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.5); /* Text shadow for clarity */
+}
+.control-buttons button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.5); /* White border on hover */
+}
+.control-buttons button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Themed Button Colors */
+#voiceControlBtn {
+    background-color: #4A69BD; /* Muted vibrant blue */
+    border: 1px solid #6A8CD8;
+    color: white;
+}
+#voiceControlBtn:hover {
+    background-color: #5B7ADF;
+}
+
+.bg-green-600 { /* Start Cooking (Action) */
+    background-color: #008080; /* Teal for action */
+    border: 1px solid #00B0B0;
+    color: white;
+}
+.bg-red-600 { /* Stop Cooking (Warning/Danger) */
+    background-color: #B22222; /* Firebrick for danger */
+    border: 1px solid #CD5C5C;
+    color: white;
+}
+.bg-yellow-600 { /* Boil Water (Process/Attention) */
+    background-color: #DAA520; /* Goldenrod for process */
+    border: 1px solid #FFD700;
+    color: #1A2E44; /* Dark text on bright button */
+}
+.bg-purple-600 { /* Emergency Stop (Critical) */
+    background-color: #6A0DAD; /* Dark Violet for critical */
+    border: 1px solid #8A2BE2;
+    color: white;
+}
+
+
+/* Specific adjustment for the messages box */
+#messages {
+    flex-grow: 1; /* Allow messages box to take remaining vertical space in right column */
+    min-height: 1.2rem; /* Minimum height for messages box, even smaller */
+    overflow-y: auto; /* Keep scroll if content truly overflows */
+    font-size: 0.55rem; /* Smaller font for messages */
+    padding: 0.2rem; /* Reduced padding */
+    line-height: 1.0; /* Tighter line height for messages */
+    background-color: #0F1D2A; /* Even darker blue-black for messages */
+    border: 1px solid #2C4868; /* Darker border, matching card borders */
+    border-radius: 0.5rem; /* Slightly less rounded corners */
+}
+#messages p { /* Individual message paragraphs */
+    margin: 0; /* Remove default paragraph margins */
+    padding: 0;
+}
+
+/* Ensure voice status and last command also have reduced line height */
+#voiceStatus, #lastCommand {
+    font-size: 0.7rem; /* Smaller font */
+    line-height: 1.1; /* Tighter line height */
+    color: #AAB7C6; /* Softer blue-gray */
+}
+
+/* Status text colors (JS will add these classes) */
+.text-green-500 { color: #00FFCC; } /* Bright Cyan Green */
+.text-yellow-500 { color: #FFEA00; } /* Neon Yellow */
+.text-red-500 { color: #FF3366; } /* Electric Pink-Red */
+.text-blue-400 { color: #00BFFF; } /* Deep Sky Blue for listening voice status */
+.text-blue-300 { color: #87CEFA; } /* Light Sky Blue for info messages */
+.text-red-400 { color: #FF4500; } /* Orange Red for error messages */
+.text-yellow-400 { color: #FFD700; } /* Gold for warning messages */
+.text-gray-400 { color: #9FB8CC; } /* Light steel blue for italic text */
+
+/* Responsive adjustments */
+@media (min-width: 1024px) { /* Adjust for large screens (lg breakpoint) */
+    .grid {
+        grid-template-columns: 2fr 1fr; /* Two main columns */
+        gap: 0.5rem; /* Consistent reduced gap */
+        display: grid; /* Re-enable grid layout on large screens */
+    }
+    .lg\:col-span-2 { /* Left column */
+        gap: 0.5rem; /* Reduced gap between cards */
+    }
+    .flex.flex-col.gap-8 { /* Right column */
+        gap: 0.5rem; /* Reduced gap between cards */
+    }
+    .dashboard-card {
+        padding: 0.5rem; /* Slightly more padding on larger screens */
+    }
+    .control-buttons button {
+        padding: 0.35rem 0.6rem; /* Slightly more button padding */
+        font-size: 0.7rem;
+    }
+    .dashboard-card h2, .dashboard-card h3 {
+        font-size: 0.9rem; /* Slightly larger headings */
+    }
+    .system-overview-card p {
+        font-size: 0.75rem;
+    }
+    #voiceStatus, #lastCommand {
+        font-size: 0.75rem;
+    }
+    #messages {
+        font-size: 0.6rem;
+        line-height: 1.0;
+        min-height: 2rem;
+    }
+}
+
+/* Additional responsive adjustments for smaller screens */
+@media (max-width: 767px) { /* For mobile/small tablets */
+    body {
+        padding: 0.2rem; /* Minimum padding */
+    }
+    .grid {
+        gap: 0.2rem; /* Minimum gaps */
+    }
+    .dashboard-card {
+        padding: 0.3rem; /* Minimum card padding */
+        gap: 0.1rem;
+    }
+    .dashboard-card h2, .dashboard-card h3 {
+        font-size: 0.75rem; /* Smallest headings */
+    }
+    .system-overview-card p {
+        font-size: 0.65rem;
+        line-height: 1.0;
+    }
+    .control-buttons button {
+        padding: 0.2rem 0.3rem;
+        font-size: 0.6rem;
+    }
+    #messages {
+        min-height: 1rem; /* Absolute minimum height */
+        font-size: 0.5rem;
+        line-height: 0.9;
+    }
+    #voiceStatus, #lastCommand {
+        font-size: 0.65rem;
+        line-height: 1.1;
+    }
+}

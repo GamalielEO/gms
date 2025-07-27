@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart LPG System Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link to your external stylesheet -->
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="min-h-screen overflow-y-auto bg-gray-900 text-gray-100 flex items-center justify-center p-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl w-full">
+
+        <!-- Left Column: Live Camera Feed & System Overview -->
+        <div class="lg:col-span-2 flex flex-col gap-8">
+            <!-- Live Camera Feed Card -->
+            <div class="dashboard-card">
+                <h2 class="text-2xl font-bold text-center">Live Camera Feed</h2>
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="overlay-canvas"></canvas>
+                </div>
+            </div>
+
+            <!-- System Overview Card -->
+            <div class="dashboard-card system-overview-card">
+                <h2 class="text-2xl font-bold text-center mb-2">System Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
+                    <p><strong>State:</strong> <span id="system-status">Loading...</span></p>
+                    <p><strong>Verification:</strong> <span id="verification-status">Pending</span></p>
+                    <p><strong>User Age:</strong> <span id="detected-age">Unknown</span></p>
+                    <p><strong>Gas Level:</strong> <span id="gas-level">0 ppm</span></p>
+                    <p><strong>Valve:</strong> <span id="valve-state">Closed</span></p>
+                    <p><strong>Cooking Status:</strong> <span id="cooking-status">Idle</span></p>
+                    <p><strong>Food Prepared:</strong> <span id="food-prepared">None</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Controls, Voice & Messages -->
+        <div class="flex flex-col gap-8">
+            <!-- Voice Commands Card -->
+            <div class="dashboard-card">
+                <h3 class="text-xl font-semibold mb-2 text-center">Voice Commands</h3>
+                <p id="voice-status" class="text-yellow-400 text-center font-medium">Voice Idle</p>
+                <p id="last-command" class="text-sm italic text-center text-gray-400">Last command: None</p>
+                <button id="voice-control-btn"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+                    Start Listening (Say "Kate")
+                </button>
+            </div>
+
+            <!-- Manual Actions Card -->
+            <div class="dashboard-card">
+                <h3 class="text-xl font-semibold mb-2 text-center">Manual Actions</h3>
+                <div class="grid grid-cols-2 gap-4 control-buttons">
+                    <button id="start-cooking-btn"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75">
+                        Start Cooking
+                    </button>
+                    <button id="stop-cooking-btn"
+                            class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+                        Stop Cooking
+                    </button>
+                    <button id="boil-water-btn"
+                            class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-75">
+                        Boil Water
+                    </button>
+                    <button id="emergency-stop-btn"
+                            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75">
+                        Emergency Stop
+                    </button>
+                </div>
+                <div class="mt-4">
+                    <button id="ai-control-btn"
+                            data-initial-state="<%= isAIActive %>"
+                            class="w-full <%= isAIActive ? 'bg-teal-600 hover:bg-teal-700' : 'bg-gray-600 hover:bg-gray-700' %> text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-75">
+                        <%= isAIActive ? 'Deactivate AI' : 'Activate AI' %>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hardware Test Panel Card -->
+            <div class="dashboard-card">
+                <h3 class="text-xl font-semibold mb-2 text-center">Hardware Test Panel</h3>
+                <div class="flex flex-col gap-4">
+                    <select id="voice-command-select" class="bg-gray-700 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <!-- Options will be populated by main.js -->
+                    </select>
+                    <button id="send-voice-command-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        Send Voice Command
+                    </button>
+                </div>
+            </div>
+
+            <!-- System Messages Card -->
+            <div class="dashboard-card">
+                <h3 class="text-xl font-semibold mb-2 text-center">System Messages</h3>
+                <div id="messages" class="text-sm h-32 overflow-y-auto bg-gray-800 p-3 rounded-lg border border-gray-700">
+                    <!-- Messages will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket.IO client library -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- TensorFlow.js for client-side ML (for age and fire detection) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.13.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+    <!-- Modularized frontend scripts -->
+    <script type="module" src="/main.js"></script>
+    <!-- The following modules are imported by main.js as ES modules -->
+    <!-- <script type="module" src="/speech.js"></script> -->
+    <!-- <script type="module" src="/model.js"></script> -->
+    <!-- <script type="module" src="/ui.js"></script> -->
+    <!-- Note: The above modules are commented out as they are imported by main.js as ES modules -->
+    <!-- Browser Compatibility: This code uses ES modules, which are supported by modern browsers (Chrome, Firefox, Edge, Safari). -->
+    <!-- For older browsers, consider using a transpiler or a bundler like Webpack to convert the code to a compatible format. -->
+</body>
+</html>
