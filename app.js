@@ -10,7 +10,7 @@ const http = require('http'); // Required for Socket.IO
 const { Server } = require('socket.io'); // Socket.IO server
 const axios = require('axios'); // For making HTTP requests to Blynk
 const multer = require('multer'); // For handling file uploads (audio blobs)
-const PORT = process.env.PORT || 3000;
+
 
 // --- Configuration ---
 // Load secrets/configuration from environment variables
